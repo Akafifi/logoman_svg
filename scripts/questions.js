@@ -1,5 +1,6 @@
 import inquirer from "inquirer"
 import fs from 'fs'
+import { getSvg } from './helpers.js'
 
 
 
@@ -11,7 +12,7 @@ inquirer.prompt([
     },
     {
         type: "input",
-        name: "text-color",
+        name: "color",
         message: "Please enter a color for your text",
     },
     {
@@ -21,8 +22,18 @@ inquirer.prompt([
     },
     {
         type: "list",
-        name: "pixel-image",
-        message: ["Circle", "Square", "Triangle"],
+        name: "logo",
+        choices: ["Circle", "Square", "Triangle"],
     },
 
 ])
+
+.then((answers) => {
+    const svgContent = getSvg(answers)
+    fs.writeFile('logo.svg', svgContent, (err) =>
+    err ? console.log(err) : console.log('Generated logo.svg')
+    )
+})
+
+
+.catch(error => console.log(error))
