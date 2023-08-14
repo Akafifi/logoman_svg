@@ -1,7 +1,7 @@
 import inquirer from "inquirer"
 import fs from 'fs'
 import { getSvg } from './helpers.js'
-
+import { Circle, Triangle, Square } from "./shapes.js"
 
 
 inquirer.prompt([
@@ -28,12 +28,28 @@ inquirer.prompt([
 
 ])
 
-.then((answers) => {
-    const svgContent = getSvg(answers)
-    fs.writeFile('logo.svg', svgContent, (err) =>
-    err ? console.log(err) : console.log('Generated logo.svg')
-    )
-})
+    .then((answers) => {
+        console.log(answers)
+            let shape
+            if(answers.logo === 'Circle') {
+                shape = new Circle()
+            } else if(answers.logo === 'Square') {
+                shape = new Square()
+            } else {
+                shape = new Triangle()
+            }
+            shape.setColor(answers.shape)
+            shape.setText(answers.text)
+            shape.setTextColor(answers.color)
+            shape.setShape(shape)
+        
+            console.log(shape)
+
+        const svgContent = getSvg(answers)
+        fs.writeFile('logo.svg', shape.render(), (err) =>
+        err ? console.log(err) : console.log('Generated logo.svg')
+        )
+    })
 
 
-.catch(error => console.log(error))
+    .catch(error => console.log(error))
